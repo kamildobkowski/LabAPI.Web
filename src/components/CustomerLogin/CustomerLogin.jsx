@@ -25,7 +25,7 @@ function CustomerLogin() {
 			const response = await axios.post('customer/login', {email, password});
 			console.log(response.data);
 			localStorage.setItem('token', response.data)
-			navigate('/');
+			window.location.href='/';
 		} catch (error) {
 			console.error(error);
 		}

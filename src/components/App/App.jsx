@@ -3,15 +3,16 @@ import './App.css'
 import {Route, BrowserRouter, Routes} from "react-router-dom";
 import CustomerLogin from "../CustomerLogin/CustomerLogin.jsx";
 import CustomerOrder from "../CustomerOrder/CustomerOrder.jsx";
-
+import Navbar from "../Navbar/Navbar.jsx";
 import {Container} from "react-bootstrap";
-
 
 function App() {
 
   return (
     <Container>
+
       <BrowserRouter>
+        <Navbar/>
         <Routes>
           <Route path="/login" element={<CustomerLogin />} />
           <Route path="/order" element={<CustomerOrder/>}/>
