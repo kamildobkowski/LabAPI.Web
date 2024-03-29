@@ -31,7 +31,7 @@ export const getWorkerEmail = () => {
 	const token = localStorage.getItem('workerToken');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+		return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
 	}
 	return null;
 }
@@ -39,7 +39,7 @@ export const getCustomerEmail = () => {
 	const token = localStorage.getItem('token');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress']);
+		return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'];
 	}
 	return null;
 }
@@ -48,7 +48,7 @@ export const getCustomerName = () => {
 	const token = localStorage.getItem('token');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'])
+		return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
 	}
 	return null;
 }
@@ -56,7 +56,7 @@ export const getWorkerName = () => {
 	const token = localStorage.getItem('workerToken');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'])
+		return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
 	}
 	return null;
 }
@@ -64,7 +64,7 @@ export const getCustomerPesel = () => {
 	const token = localStorage.getItem('token');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['Pesel']);
+		return decoded['Pesel'];
 	}
 	return null;
 }
