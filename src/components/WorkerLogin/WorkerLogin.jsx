@@ -2,7 +2,6 @@ import {Button, Container, Form, Spinner} from "react-bootstrap";
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {getWorkerRole} from "../../jwtToken.js";
 
 function WorkerLogin() {
 	const [email, setEmail] = useState('');
@@ -19,7 +18,6 @@ function WorkerLogin() {
 			const response = await axios.post('worker/login', {email, password});
 			console.log(response.data)
 			localStorage.setItem('workerToken', response.data);
-			getWorkerRole();
 			navigate('/lab');
 		}
 		catch(error) {

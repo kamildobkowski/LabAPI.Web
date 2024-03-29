@@ -5,13 +5,14 @@ import CustomerOrder from "../CustomerOrder/CustomerOrder.jsx";
 import CustomerNavbar from "../CustomerNavbar/CustomerNavbar.jsx";
 import {Container} from "react-bootstrap";
 import WorkerLogin from "../WorkerLogin/WorkerLogin.jsx";
+import WorkerNavbar from "../WorkerNavbar/WorkerNavbar.jsx";
 
 function App() {
 
   return (
     <Container>
       <BrowserRouter>
-        <CustomerNavbar/>
+        {location.pathname.startsWith('/lab') ? <WorkerNavbar/> : <CustomerNavbar/>}
         <Routes>
           <Route path="/lab/*" element={<WorkerRoutes/>} />
           <Route path="/*" element={<CustomerRoutes/>}/>

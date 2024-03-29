@@ -5,11 +5,24 @@ export const isCustomerLogger = () => {
 	return !!token;
 }
 
+export const isWorkerLogger = () => {
+	const token = localStorage.getItem('workerToken');
+	return !!token;
+}
+
+export const logoutCustomer = () => {
+	localStorage.removeItem('token');
+}
+
+export const logoutWorker = () => {
+	localStorage.removeItem('workerToken');
+}
+
 export const getWorkerRole = () => {
 	const token = localStorage.getItem('workerToken');
 	if(token) {
 		const decoded = jwtDecode.jwtDecode(token);
-		console.log(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
+		return decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 	}
 	return null;
 }
