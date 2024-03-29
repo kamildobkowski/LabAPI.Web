@@ -1,7 +1,7 @@
 import {Button, Nav, Navbar as Navb} from 'react-bootstrap';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-function Navbar() {
+function CustomerNavbar() {
 	const [logged, setLogged] = useState(false);
 	const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ function Navbar() {
 						<Nav.Link onClick={()=> {
 						localStorage.removeItem("token");
 						setLogged(false);
+						navigate("/");
 						}}>
 							Wyloguj
 						</Nav.Link>
@@ -39,4 +40,4 @@ function Navbar() {
 	);
 }
 
-export default Navbar;
+export default CustomerNavbar;
