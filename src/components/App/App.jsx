@@ -6,6 +6,7 @@ import CustomerNavbar from "../CustomerNavbar/CustomerNavbar.jsx";
 import {Container} from "react-bootstrap";
 import WorkerLogin from "../WorkerLogin/WorkerLogin.jsx";
 import WorkerNavbar from "../WorkerNavbar/WorkerNavbar.jsx";
+import WorkerTestList from "../WorkerTests/WorkerTestList.jsx";
 
 function App() {
 
@@ -32,6 +33,8 @@ const CustomerRoutes = () => {
 const WorkerRoutes = () => {
   return <Routes>
     <Route path="/login" element={<WorkerLogin/>}/>
+    <Route path="/test" element={<WorkerTestList/>}/>
+    {/*<Route path="/test/:id" element={<WorkerTestDetails/>}/>*/}
   </Routes>
 }
 

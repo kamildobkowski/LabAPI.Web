@@ -69,3 +69,7 @@ export const getCustomerPesel = () => {
 	return null;
 }
 
+export const getWorkerToken = () => {
+	return localStorage.getItem('workerToken');
+}
+

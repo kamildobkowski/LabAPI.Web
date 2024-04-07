@@ -51,8 +51,8 @@ const Links = (role, navigate) => {
 		case "LabWorker":
 			return (
 				<>
-					<Nav.Link onClick={()=> navigate("/orders")}>Zlecenia</Nav.Link>
-					<Nav.Link onClick={()=> navigate("/tests")}>Testy</Nav.Link>
+					<Nav.Link onClick={()=> navigate("/lab/order")}>Zlecenia</Nav.Link>
+					<Nav.Link onClick={()=> navigate("/lab/test")}>Testy</Nav.Link>
 				</>
 			)
 		case "Admin":
