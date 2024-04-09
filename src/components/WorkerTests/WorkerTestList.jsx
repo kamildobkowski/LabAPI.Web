@@ -12,7 +12,7 @@ function WorkerTestList() {
 	const getTests = async () => {
 		setIsLoading(true);
 		try {
-			const response = await axios.get(`tests?page`, {
+			const response = await axios.get(`tests`, {
 				headers: {
 					"Authorization": `Bearer ${getWorkerToken()}`,
 				}
@@ -34,7 +34,7 @@ function WorkerTestList() {
 			: <ListGroup>
 				{tests.map(t => {
 					return (
-						<ListGroup.Item key={t.id} onClick={()=>navigate(`/lab/tests/${t.id}`)}>
+						<ListGroup.Item key={t.id} onClick={()=>navigate(`/lab/test/${t.id}`)}>
 							<p>({t.shortName} {t.name})</p>
 						</ListGroup.Item>
 					)
