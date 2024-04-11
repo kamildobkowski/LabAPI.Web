@@ -64,7 +64,7 @@ function WorkerTestList() {
 												<small className="text-muted">{t.shortName}</small>
 											</Col>
 											<Col xs={2} className="d-flex justify-content-end">
-												<Button variant="info" onClick={(e)=>{e.stopPropagation(); navigate(`/lab/test/${t.id}`);}}>Edytuj</Button>
+												<Button variant="info" onClick={(e)=>{e.stopPropagation(); navigate(`/lab/test/edit/${t.id}`);}}>Edytuj</Button>
 												<Button variant="danger" onClick={(e)=>{e.stopPropagation(); setTestToDelete(t);}}>Usuń</Button>
 											</Col>
 										</Row>
@@ -74,6 +74,7 @@ function WorkerTestList() {
 						</ListGroup>
 					</Col>
 				</Row>
+				<Button variant="outline-success" onClick={(e)=> {e.stopPropagation(); navigate(`/lab/test/add`)}}>Dodaj nowy test</Button>
 				<Modal show={selectedTest !== null} onHide={() => setSelectedTest(null)}>
 					<Modal.Header closeButton>
 						<Modal.Title>Szczegóły testu</Modal.Title>
