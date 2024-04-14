@@ -1,26 +1,32 @@
-import {ListGroup, Spinner, Container, Row, Col, Button, Modal} from "react-bootstrap";
+import {ListGroup, Spinner, Container, Row, Col, Button, Modal, Pagination} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {getWorkerToken} from "../../jwtToken.js";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 function WorkerTestList() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [tests, setTests] = useState([]);
+	const [pagedList, setPagedList] = useState(null);
 	const [selectedTest, setSelectedTest] = useState(null);
 	const [testToDelete, setTestToDelete] = useState(null);
 	const navigate = useNavigate();
 
+	const location = useLocation();
+	const queryParams = new URLSearchParams(location.search);
+	const [page, setPage] = useState(Number(queryParams.get('page') ?? 1));
+
 	const getTests = async () => {
 		setIsLoading(true);
 		try {
-			const response = await axios.get(`tests`, {
+			const response = await axios.get(`tests?page=${page}&pageSize=2`, {
 				headers: {
 					"Authorization": `Bearer ${getWorkerToken()}`,
 				}
 			});
 			console.log(response.data);
-			setTests(response.data);
+			setPagedList(response.data);
+			setTests(response.data.list);
 			setIsLoading(false);
 		} catch (error) {
 			console.error(error);
@@ -44,7 +50,8 @@ function WorkerTestList() {
 
 	useEffect(() => {
 		getTests();
-	}, []);
+		console.log(page);
+	}, [page]);
 	return (
 		isLoading ?
 			<Spinner animation="border" role="status">
@@ -110,6 +117,20 @@ function WorkerTestList() {
 						<Button variant="danger" onClick={deleteTest}>Tak</Button>
 					</Modal.Footer>
 				</Modal>
+			<Pagination>
+				<Pagination.First/>
+				<Pagination.Prev/>
+				{pagedList && [...Array(pagedList.pageCount)].map((_, i) => (
+					<Pagination.Item key={i+1} active={i+1 === page} onClick={() => {
+						setPage(i+1);
+						navigate(`/lab/test?page=${i+1}`);
+					}}>
+						{i+1}
+					</Pagination.Item>
+				))}
+				<Pagination.Next/>
+				<Pagination.Last/>
+			</Pagination>
 			</Container>
 	)
 }
