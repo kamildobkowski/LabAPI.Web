@@ -1,4 +1,4 @@
-import {ListGroup, Spinner, Container, Row, Col, Button, Modal, Pagination, Form} from "react-bootstrap";
+import {ListGroup, Spinner, Container, Row, Col, Button, Modal, Pagination, Form, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {getWorkerToken} from "../../jwtToken.js";
@@ -12,14 +12,32 @@ function WorkerTestList() {
 	const [testToDelete, setTestToDelete] = useState(null);
 	const navigate = useNavigate();
 
+	const pageSizes = [5, 10, 20];
+	const defaultPageSize = 10;
+
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
 	const [page, setPage] = useState(Number(queryParams.get('page') ?? 1));
+	const [pageSize, setPageSize] =
+		useState(Number(
+			pageSizes.includes(Number(queryParams.get('pageSize'))))
+			?
+			pageSizes.includes(Number(queryParams.get('pageSize')))
+			:
+			defaultPageSize);
 
 	const [search, setSearch] = useState('');
 
+	const sortParams = {
+		"Nazwa": "Name",
+		"Kod": "ShortName",
+	}
+
+	const [sortBy, setSortBy] = useState(queryParams.get('sortBy') ?? "Nazwa");
+	const [asc, setAsc] = useState(queryParams.get('asc') ?? true);
+
 	const getTests = async () => {
-		let url = `tests?page=${page}&pageSize=10`;
+		let url = `tests?page=${page}&pageSize=${pageSize}&sort=${sortParams[sortBy]}&asc=${asc}`;
 		if(search) {
 			url += `&filter=${search}`;
 		}
@@ -55,15 +73,57 @@ function WorkerTestList() {
 	}
 
 	useEffect(() => {
-		getTests();
+		getTests().catch(console.error);
+		navigate(`/lab/test?page=${page}&pageSize=${pageSize}&filter=${search}&sortBy=${sortBy}&asc=${asc}`);
 		console.log(page);
-	}, [page, search]);
+	}, [page, search, pageSize, asc, sortBy]);
+
+	const pageSizeClick = (size) => {
+		setPageSize(size);
+		setPage(1);
+		// navigate(`/lab/test?page=1&pageSize=${size}`);
+	}
+
 	return (
 		<>
 			<Form>
 				<Form.Label>Wyszukaj</Form.Label>
 				<Form.Control type="text" placeholder="Wyszukaj test" value={search} onChange={(e) => setSearch(e.target.value)}/>
 			</Form>
+			<Dropdown>
+				<Dropdown.Toggle variant="primary-outline" id="dropdown-basic">Liczba na stronie: {pageSize}</Dropdown.Toggle>
+				<Dropdown.Menu>
+					{pageSizes.map((size) => {
+						return (
+							<Dropdown.Item key={size} onClick={() => pageSizeClick(size)}>{size}</Dropdown.Item>
+						)
+					})}
+				</Dropdown.Menu>
+			</Dropdown>
+			<Dropdown>
+				<Dropdown.Toggle variant="success-outline" id="dropdown-sortBy">Sortuj po: {sortBy} {asc ? 'rosnąco' : 'malejąco'}</Dropdown.Toggle>
+				<Dropdown.Menu>
+					{Object.keys(sortParams).map((key) => {
+						return(
+							<>
+								<Dropdown.Item key={key + "asc"} onClick={()=> {
+									setSortBy(key);
+									setAsc(true);
+								}}>
+									{key} rosnąco
+								</Dropdown.Item>
+								<Dropdown.Item key={key + "desc"} onClick={()=> {
+									setSortBy(key);
+									setAsc(false);
+								}}>
+									{key} malejąco
+								</Dropdown.Item>
+							</>
+						)
+
+					})}
+				</Dropdown.Menu>
+			</Dropdown>
 		<div>
 			{isLoading ?
 			<Spinner animation="border" role="status">
@@ -130,18 +190,15 @@ function WorkerTestList() {
 				</Modal.Footer>
 			</Modal>
 			<Pagination>
-				<Pagination.First/>
-				<Pagination.Prev/>
+				<Pagination.First onClick={()=> setPage(1)}/>
+				<Pagination.Prev onClick={() => page>1 ? setPage(page-1) : setPage(1)}/>
 				{pagedList && [...Array(pagedList.pageCount)].map((_, i) => (
-					<Pagination.Item key={i+1} active={i+1 === page} onClick={() => {
-						setPage(i+1);
-						navigate(`/lab/test?page=${i+1}`);
-					}}>
+					<Pagination.Item key={i+1} active={i+1 === page} onClick={() => setPage(i+1)}>
 						{i+1}
 					</Pagination.Item>
 				))}
-				<Pagination.Next/>
-				<Pagination.Last/>
+				<Pagination.Next onClick={() => page < pagedList.pageCount ? setPage(page+1) : setPage(pagedList.pageCount)}/>
+				<Pagination.Last onClick={() => setPage(pagedList.pageCount)}/>
 			</Pagination>
 		</Container>}
 		</div>
