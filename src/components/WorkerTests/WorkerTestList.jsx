@@ -18,13 +18,11 @@ function WorkerTestList() {
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
 	const [page, setPage] = useState(Number(queryParams.get('page') ?? 1));
-	const [pageSize, setPageSize] =
-		useState(Number(
-			pageSizes.includes(Number(queryParams.get('pageSize'))))
-			?
-			pageSizes.includes(Number(queryParams.get('pageSize')))
-			:
-			defaultPageSize);
+	const pageSizeQuery = queryParams.get('pageSize');
+	const pageSizeValue = Number(pageSizeQuery);
+	const [pageSize, setPageSize] = useState(
+		pageSizes.includes(pageSizeValue) ? pageSizeValue : defaultPageSize
+	);
 
 	const [search, setSearch] = useState('');
 
