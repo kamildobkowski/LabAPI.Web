@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Accordion, Button, Form, FormGroup, Spinner} from "react-bootstrap";
+import {Button, Spinner} from "react-bootstrap";
 import {getWorkerToken} from "../../jwtToken.js";
 import EditTestMarker from "../EditTestMarker/EditTestMarker.jsx";
 
@@ -11,7 +11,6 @@ function WorkerTestDetails() {
 	const [test, setTest] = useState(null);
 
 	useEffect(() => {
-		console.log("hujhujhuj")
 		getTest();
 	}, []);
 	const getTest = async () => {
