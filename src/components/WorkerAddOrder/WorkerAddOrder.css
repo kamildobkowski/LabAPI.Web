@@ -1,0 +1,44 @@
+.container {
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.list-group {
+    margin-bottom: 20px;
+}
+
+.list-group-item {
+    margin-bottom: 10px;
+}
+
+.button {
+    display: block;
+    width: 100%;
+}
+
+.alert {
+    width: 300px;
+    right: 20px;
+}

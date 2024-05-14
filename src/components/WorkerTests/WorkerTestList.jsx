@@ -35,7 +35,7 @@ function WorkerTestList() {
 	const [asc, setAsc] = useState(queryParams.get('asc') ?? true);
 
 	const getTests = async () => {
-		let url = `tests?page=${page}&pageSize=${pageSize}&sort=${sortParams[sortBy]}&asc=${asc}`;
+		let url = `tests/page?page=${page}&pageSize=${pageSize}&sort=${sortParams[sortBy]}&asc=${asc}`;
 		if(search) {
 			url += `&filter=${search}`;
 		}
