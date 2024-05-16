@@ -2,11 +2,13 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {Button, Col, ListGroup, Row, Spinner} from "react-bootstrap";
 import {getWorkerToken} from "../../jwtToken.js";
+import {useNavigate} from "react-router-dom";
 
 function WorkerOrders() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [pagedList, setPagedList] = useState(null);
 	const [orders, setOrders] = useState([]);
+	const navigate = useNavigate();
 
 	const fetchOrders = async () => {
 		setIsLoading(true);
@@ -44,7 +46,9 @@ function WorkerOrders() {
 						<ListGroup variant="flush">
 							{orders.map(order => {
 								return (
-									<ListGroup.Item action key={order.orderNumber}>
+									<ListGroup.Item action key={order.orderNumber} onClick={() => {
+										navigate(`/lab/order/details/${order.orderNumber}`);
+									}}>
 										<Row>
 											<Col>
 												<h5>{order.orderNumber}</h5>
@@ -57,7 +61,6 @@ function WorkerOrders() {
 												<Status status={order.status}/>
 											</Col>
 										</Row>
-
 									</ListGroup.Item>
 								)
 							})}

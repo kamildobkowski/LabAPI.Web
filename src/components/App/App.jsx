@@ -11,6 +11,7 @@ import WorkerTestDetails from "../WorkerTestDetails/WorkerTestDetails.jsx";
 import WorkerAddTest from "../WorkerAddTest/WorkerAddTest.jsx";
 import WorkerOrders from "../WorkerOrders/WorkerOrders.jsx";
 import WorkerAddOrder from "../WorkerAddOrder/WorkerAddOrder.jsx";
+import WorkerOrderDetails from "../WorkerOrderDetails/WorkerOrderDetails.jsx";
 
 function App() {
 
@@ -42,6 +43,7 @@ const WorkerRoutes = () => {
     <Route path="/test/edit/:id" element={<WorkerTestDetails/>}/>
     <Route path="/order" element={<WorkerOrders/>}/>
     <Route path="/order/add" element={<WorkerAddOrder/>}/>
+    <Route path="/order/details/:orderNumber" element={<WorkerOrderDetails/>}/>
   </Routes>
 }
 
