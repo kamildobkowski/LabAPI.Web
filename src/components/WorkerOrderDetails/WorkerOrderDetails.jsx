@@ -8,7 +8,7 @@ function WorkerOrderDetails() {
 	const [order, setOrder] = useState(null);
 	const {orderNumber} = useParams();
 	const [isLoading, setIsLoading] = useState(true);
-
+	const [editedMarkers, setEditedMarkers] = useState({});
 	useEffect(() => {
 		setIsLoading(true);
 		axios.get(`/order/${orderNumber}`, {
@@ -21,19 +21,25 @@ function WorkerOrderDetails() {
 				setIsLoading(false);
 			});
 
-	}, [])
+	}, [orderNumber])
 
 	const patchResult = async () => {
 		let data = {
-			orderNumber: order.orderNumber
+			orderNumber: order.orderNumber,
+			results: editedMarkers
 		};
-		order.forEach(test => {
-			test.forEach(marker => {
-				data.results[test.shortName][marker.shortName] = marker.result;
+		try {
+			await axios.patch(`/order/${orderNumber}`, data, {
+				headers: {
+					"Authorization": `Bearer ${getWorkerToken()}`
+				}
 			})
-		})
-		console.log(data);
-	}
+			location.reload();
+		}
+		catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		isLoading ?
@@ -66,7 +72,7 @@ function WorkerOrderDetails() {
 								</Table>
 						</Accordion.Body>
 				</Accordion>
-				{order.tests.map(test => {
+				{order.tests.map((test) => {
 					return (
 						<Accordion key={test.id}>
 							<Accordion.Header>{test.shortName} {test.name}</Accordion.Header>
@@ -83,7 +89,7 @@ function WorkerOrderDetails() {
 										</tr>
 									</thead>
 									<tbody>
-										{test.markers.map(marker => {
+										{test.markers.map((marker) => {
 											return (
 												<tr key={marker.id}>
 													<td><strong>{marker.shortName}</strong> {marker.name}</td>
@@ -96,6 +102,27 @@ function WorkerOrderDetails() {
 															type="text"
 															value={marker.result}
 															disabled={marker.result !== undefined && marker.result !== null && marker.result !== ''}
+															onChange={e => {
+																let modified = {...editedMarkers};
+																if(e.target.value !== null && e.target.value !== '') {
+																	if(!modified[test.shortName]) {
+																		modified[test.shortName] = {};
+																		test.markers.forEach(r=> {
+																			modified[test.shortName][r.shortName] = r.result ?? '';
+																		});
+																	}
+																	modified[test.shortName][marker.shortName] = e.target.value;
+																}
+																else {
+																	if(modified[test.shortName]) {
+																		modified[test.shortName][marker.shortName] = '';
+																		if(Object.values(modified[test.shortName]).every(v => v === '')) {
+																			delete modified[test.shortName];
+																		}
+																	}
+																}
+																setEditedMarkers(modified);
+															}}
 														/>
 													</td>
 												</tr>
@@ -107,7 +134,7 @@ function WorkerOrderDetails() {
 						</Accordion>
 					)
 				})}
-				<Button variant="success">Zapisz zmiany</Button>
+				<Button variant="success" onClick={patchResult}>Zapisz zmiany</Button>
 			</>
 	)
 }
