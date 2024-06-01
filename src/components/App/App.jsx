@@ -12,6 +12,8 @@ import WorkerAddTest from "../WorkerAddTest/WorkerAddTest.jsx";
 import WorkerOrders from "../WorkerOrders/WorkerOrders.jsx";
 import WorkerAddOrder from "../WorkerAddOrder/WorkerAddOrder.jsx";
 import WorkerOrderDetails from "../WorkerOrderDetails/WorkerOrderDetails.jsx";
+import NotFound from "../ErrorPages/NotFound.jsx";
+import Forbidden from "../ErrorPages/Forbidden.jsx";
 
 function App() {
 
@@ -32,6 +34,8 @@ const CustomerRoutes = () => {
   return <Routes>
     <Route path="/login" element={<CustomerLogin />} />
     <Route path="/order" element={<CustomerOrder/>}/>
+    <Route path="/404" element={<NotFound/>}/>
+    <Route path="/403" element={<Forbidden/>}/>
   </Routes>
 }
 
@@ -44,6 +48,8 @@ const WorkerRoutes = () => {
     <Route path="/order" element={<WorkerOrders/>}/>
     <Route path="/order/add" element={<WorkerAddOrder/>}/>
     <Route path="/order/details/:orderNumber" element={<WorkerOrderDetails/>}/>
+    <Route path="/404" element={<NotFound/>}/>
+    <Route path="/403" element={<Forbidden/>}/>
   </Routes>
 }
 
