@@ -1,9 +1,8 @@
 import {useParams} from "react-router-dom";
-import axios from "axios";
 import {useEffect, useState} from "react";
 import {Button, Spinner} from "react-bootstrap";
-import {getWorkerToken} from "../../jwtToken.js";
 import EditTestMarker from "../EditTestMarker/EditTestMarker.jsx";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerTestDetails() {
 	const {id} = useParams();
@@ -15,11 +14,7 @@ function WorkerTestDetails() {
 	}, []);
 	const getTest = async () => {
 		try {
-			const response = await axios.get(`tests/${id}`, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			const response = await workerAxios.get(`tests/${id}`);
 			console.log(response.data);
 			setTest(response.data);
 			setIsLoading(false);
@@ -32,11 +27,7 @@ function WorkerTestDetails() {
 	const updateTest = async () => {
 		setIsLoading(true);
 		try {
-			const response = await axios.put(`tests/${id}`, test, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			const response = await workerAxios.put(`tests/${id}`, test);
 			console.log(response.data);
 			await getTest();
 		}

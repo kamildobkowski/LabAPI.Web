@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
-import axios from "axios";
 import {Button, Col, Dropdown, Form, ListGroup, Pagination, Row, Spinner} from "react-bootstrap";
-import {getWorkerToken} from "../../jwtToken.js";
 import {useLocation, useNavigate} from "react-router-dom";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerOrders() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -40,11 +39,7 @@ function WorkerOrders() {
 		url = getUrl();
 		setIsLoading(true);
 		try {
-			const response = await axios.get(url, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			const response = await workerAxios.get(url);
 			console.log(response.data);
 			setPagedList(response.data);
 			setOrders(response.data.list);

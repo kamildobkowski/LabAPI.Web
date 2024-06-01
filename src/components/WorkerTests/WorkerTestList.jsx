@@ -1,8 +1,7 @@
 import {ListGroup, Spinner, Container, Row, Col, Button, Modal, Pagination, Form, Dropdown} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import {getWorkerToken} from "../../jwtToken.js";
 import {useLocation, useNavigate} from "react-router-dom";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerTestList() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -41,11 +40,7 @@ function WorkerTestList() {
 		}
 		setIsLoading(true);
 		try {
-			const response = await axios.get(url, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			const response = await workerAxios.get(url);
 			console.log(response.data);
 			setPagedList(response.data);
 			setTests(response.data.list);
@@ -58,11 +53,7 @@ function WorkerTestList() {
 	const deleteTest = async () => {
 		setIsLoading(true);
 		try {
-			await axios.delete(`tests/${testToDelete.id}`, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			await workerAxios.delete(`tests/${testToDelete.id}`);
 			await getTests();
 		} catch (error) {
 			console.error(error);

@@ -1,9 +1,8 @@
 import {useState} from "react";
 import EditTestMarker from "../EditTestMarker/EditTestMarker.jsx";
 import {Button, Form, FormGroup, Spinner} from "react-bootstrap";
-import {getWorkerToken} from "../../jwtToken.js";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerAddTest() {
 	const [test, setTest] = useState({ markers: [] });
@@ -13,11 +12,7 @@ function WorkerAddTest() {
 	const addTest = async () => {
 		try {
 			setIsLoading(true);
-			await axios.post("tests", test, {
-				headers: {
-					"Authorization": `Bearer ${getWorkerToken()}`,
-				}
-			});
+			await workerAxios.post("tests", test);
 			setIsLoading(false);
 			navigate("/lab/test");
 		}

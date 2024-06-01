@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Container, Form, Button, Spinner} from 'react-bootstrap';
-import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {loginCustomer} from "../../jwtToken.js";
+import customerAxios from "../../axios/customerAxios.js";
 
 function CustomerLogin() {
 	const [email, setEmail] = useState('');
@@ -12,7 +12,6 @@ function CustomerLogin() {
 	const [surname, setSurname] = useState('');
 	const [pesel, setPesel] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
-	const navigate = useNavigate();
 
 	useEffect(() => {
 
@@ -22,9 +21,8 @@ function CustomerLogin() {
 		event.preventDefault();
 		setIsLoading(true);
 		try {
-			const response = await axios.post('customer/login', {email, password});
-			console.log(response.data);
-			localStorage.setItem('token', response.data)
+			const response = await customerAxios.post('customer/login', {email, password});
+			loginCustomer(response.data);
 			window.location.href='/';
 		} catch (error) {
 			console.error(error);
@@ -43,7 +41,7 @@ function CustomerLogin() {
 			pesel: pesel
 		}
 	try {
-				const response = await axios.post('customer/register', model);
+				const response = await customerAxios.post('customer/register', model);
 				console.log(response.data);
 				setRegister(false);
 				if(response.status === 200) {

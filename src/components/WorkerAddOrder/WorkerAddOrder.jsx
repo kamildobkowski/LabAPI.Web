@@ -12,10 +12,9 @@ import {
 	Row,
 	Modal
 } from 'react-bootstrap';
-import axios from 'axios';
-import { getWorkerToken } from '../../jwtToken.js';
 import './WorkerAddOrder.css';
-import {useNavigate} from "react-router-dom"; // Importujemy plik CSS
+import {useNavigate} from "react-router-dom";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerAddOrder() {
 	const [tests, setTests] = useState([]);
@@ -74,11 +73,7 @@ function WorkerAddOrder() {
 	const fetchTests = () => {
 		setIsLoading(true);
 		let url = '/tests';
-		axios.get(url, {
-			headers: {
-				"Authorization": `Bearer ${getWorkerToken()}`,
-			}
-		})
+		workerAxios.get(url)
 			.then(response => {
 				setTests(response.data);
 				setIsLoading(false);
@@ -112,11 +107,7 @@ function WorkerAddOrder() {
 		else {
 			order.sex = 'f';
 		}
-		await axios.post('/order', order, {
-			headers: {
-				"Authorization": `Bearer ${getWorkerToken()}`,
-			}
-		}).then(response => {
+		await workerAxios.post('/order', order).then(response => {
 			const location = response.headers.location;
 			setOrderNumber(location.split('/').pop());
 			setShowModal(true);

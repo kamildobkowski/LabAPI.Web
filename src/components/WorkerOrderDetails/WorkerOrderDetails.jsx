@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import axios from "axios";
 import {useParams} from "react-router-dom";
 import {getWorkerToken} from "../../jwtToken.js";
 import {Spinner, Table, Button, Accordion, FormControl} from "react-bootstrap";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerOrderDetails() {
 	const [order, setOrder] = useState(null);
@@ -11,10 +11,7 @@ function WorkerOrderDetails() {
 	const [editedMarkers, setEditedMarkers] = useState({});
 	useEffect(() => {
 		setIsLoading(true);
-		axios.get(`/order/${orderNumber}`, {
-			headers: {
-				"Authorization": `Bearer ${getWorkerToken()}`
-			}})
+		workerAxios.get(`/order/${orderNumber}`)
 			.then(response => {
 				console.log(response.data);
 				setOrder(response.data);
@@ -29,7 +26,7 @@ function WorkerOrderDetails() {
 			results: editedMarkers
 		};
 		try {
-			await axios.patch(`/order/${orderNumber}`, data, {
+			await workerAxios.patch(`/order/${orderNumber}`, data, {
 				headers: {
 					"Authorization": `Bearer ${getWorkerToken()}`
 				}

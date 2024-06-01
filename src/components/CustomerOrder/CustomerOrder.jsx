@@ -1,7 +1,7 @@
 import {FormGroup, Form, Button, Container} from "react-bootstrap";
-import axios from "axios";
 import {useState} from "react";
 import {saveAs} from "file-saver";
+import customerAxios from "../../axios/customerAxios.js";
 
 function CustomerOrder() {
 	const [pesel, setPesel] = useState('');
@@ -10,7 +10,7 @@ function CustomerOrder() {
 		event.preventDefault();
 
 		try {
-			const response = await axios.get(`order/pesel?pesel=${pesel}&orderNumber=${orderNumber}`, { responseType: 'blob' });
+			const response = await customerAxios.get(`order/pesel?pesel=${pesel}&orderNumber=${orderNumber}`, { responseType: 'blob' });
 			const contentDisposition = response.headers['content-disposition'];
 			let fileName = 'downloadedFile';
 

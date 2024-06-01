@@ -1,7 +1,7 @@
 import {Button, Container, Form, Spinner} from "react-bootstrap";
 import {useState} from "react";
-import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import workerAxios from "../../axios/workerAxios.js";
 
 function WorkerLogin() {
 	const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ function WorkerLogin() {
 		setIsLoading(true);
 		try {
 			console.log(email, password);
-			const response = await axios.post('worker/login', {email, password});
+			const response = await workerAxios.post('worker/login', {email, password});
 			console.log(response.data)
 			localStorage.setItem('workerToken', response.data);
 			navigate('/lab');
