@@ -73,3 +73,11 @@ export const getWorkerToken = () => {
 	return localStorage.getItem('workerToken');
 }
 
+export const loginWorker = (token) => {
+	localStorage.setItem('workerToken', token);
+}
+
+export const loginCustomer = (token) => {
+	localStorage.setItem('token', token);
+}
+
