@@ -14,6 +14,7 @@ import WorkerAddOrder from "../WorkerAddOrder/WorkerAddOrder.jsx";
 import WorkerOrderDetails from "../WorkerOrderDetails/WorkerOrderDetails.jsx";
 import NotFound from "../ErrorPages/NotFound.jsx";
 import Forbidden from "../ErrorPages/Forbidden.jsx";
+import AdminWorkerList from "../Admin/AdminWorkerList.jsx";
 
 function App() {
 
@@ -50,6 +51,8 @@ const WorkerRoutes = () => {
     <Route path="/order/details/:orderNumber" element={<WorkerOrderDetails/>}/>
     <Route path="/404" element={<NotFound/>}/>
     <Route path="/403" element={<Forbidden/>}/>
+    <Route path="admin/worker" element={<AdminWorkerList/>}/>
+    {/*<Route path="*" element={<NotFound/>}/>*/}
   </Routes>
 }
 
