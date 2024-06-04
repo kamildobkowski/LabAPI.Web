@@ -60,10 +60,34 @@ function AdminWorkerList() {
 	const [showGeneratedUser, setShowGeneratedUser] = useState(false);
 	const [newUserResponse, setNewUserResponse] = useState(null);
 	const [copyCheckmarkVisible, setCopyCheckmarkVisible] = useState(false);
+	const [errors, setErrors] = useState({});
+
+	const validateAddUser = () => {
+		let errorList = {};
+		if(!newUser.name) {
+			errorList.name = 'Imię jest wymagane';
+		}
+		if(!newUser.surname) {
+			errorList.surname = 'Nazwisko jest wymagane';
+		}
+		if(!newUser.email) {
+			errorList.email = 'Email jest wymagany';
+		}
+		if(!newUser.userRole) {
+			errorList.userRole = 'Rola jest wymagana';
+		}
+		setErrors({...errorList});
+		return Object.keys(errorList).length === 0;
+	}
 
 	const handleAddUser = async () => {
-		setShowGeneratedUser(true);
+
 		setIsLoadingNewUser(true);
+		if(!validateAddUser()) {
+			setIsLoadingNewUser(false);
+			return;
+		}
+		setShowGeneratedUser(true);
 		await workerAxios.post('worker/register', newUser)
 			.then((response) => {
 				setNewUserResponse(response.data);
@@ -258,18 +282,22 @@ function AdminWorkerList() {
 							<Form>
 								<Form.Group>
 									<Form.Label>Imię</Form.Label>
-									<Form.Control value={newUser.name} onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, name: e.target.value})}} type="text"/>
+									<Form.Control value={newUser.name} onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, name: e.target.value})}} type="text" isInvalid={!!errors.name}/>
+									<Form.Control.Feedback type="invalid" hidden={!errors.name}>{errors.name}</Form.Control.Feedback>
 									<Form.Label>Nazwisko</Form.Label>
-									<Form.Control value={newUser.surname} type="text" onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, surname: e.target.value})}}/>
+									<Form.Control value={newUser.surname} type="text" onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, surname: e.target.value})}} isInvalid={!!errors.surname}/>
+									<Form.Control.Feedback type="invalid" hidden={!errors.surname}>{errors.surname}</Form.Control.Feedback>
 									<Form.Label>Email</Form.Label>
-									<Form.Control value={newUser.email} type="email" onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, email: e.target.value})}}/>
+									<Form.Control value={newUser.email} type="email" onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, email: e.target.value})}} isInvalid={!!errors.email}/>
+									<Form.Control.Feedback type="invalid" hidden={!errors.email}>{errors.email}</Form.Control.Feedback>
 									<Form.Label>Rola</Form.Label>
-									<Form.Select value={newUser.userRole} onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, userRole: e.target.value})}}>
+									<Form.Select value={newUser.userRole} onChange={(e)=>{e.stopPropagation(); setNewUser({...newUser, userRole: e.target.value})}} isInvalid={!!errors.userRole}>
 										<option value="">Wybierz rolę</option>
 										<option value="Admin">Administrator</option>
 										<option value="LabWorker">Pracownik</option>
 										<option value="LabManager">Kierownik</option>
 									</Form.Select>
+									<Form.Control.Feedback type="invalid" hidden={!errors.userRole}>{errors.userRole}</Form.Control.Feedback>
 								</Form.Group>
 							</Form>
 						</Modal.Body>

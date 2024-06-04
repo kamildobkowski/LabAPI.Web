@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import EditTestMarker from "../EditTestMarker/EditTestMarker.jsx";
 import {Button, Form, FormGroup, Spinner} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
@@ -8,17 +8,30 @@ function WorkerAddTest() {
 	const [test, setTest] = useState({ markers: [] });
 	const [isLoading, setIsLoading] = useState(false);
 	const navigate = useNavigate();
+	const [errors, setErrors] = useState({});
 
 	const addTest = async () => {
-		try {
 			setIsLoading(true);
+			const isValid = validateTest()
+			if(!isValid) {
+				setIsLoading(false);
+				return;
+			}
 			await workerAxios.post("tests", test);
 			setIsLoading(false);
 			navigate("/lab/test");
+	}
+
+	const validateTest = () => {
+		let errorList = {};
+		if(!test.name) {
+			errorList.name = 'Nazwa jest wymagana';
 		}
-		catch (error) {
-			console.log(error)
+		if(!test.shortName) {
+			errorList.shortName = 'Skrót jest wymagany';
 		}
+		setErrors({...errorList});
+		return Object.keys(errorList).length === 0;
 	}
 
 	return (
@@ -26,15 +39,15 @@ function WorkerAddTest() {
 			<h1>Dodaj nowy test</h1>
 			<FormGroup>
 				<Form.Label>
-					<h2>Nazwa</h2>
+					<h5>Nazwa</h5>
 				</Form.Label>
-				<Form.Control value={test.name} onChange={(e) => setTest({...test, name: e.target.value})}/>
+				<Form.Control value={test.name} onChange={(e) => setTest({...test, name: e.target.value})} isInvalid={!!errors.name}/>
 				<Form.Label>
-					<h2>Skrót</h2>
+					<h5>Skrót</h5>
 				</Form.Label>
-				<Form.Control value={test.shortName} onChange={(e) => setTest({...test, shortName: e.target.value})}/>
+				<Form.Control value={test.shortName} onChange={(e) => setTest({...test, shortName: e.target.value})} isInvalid={!!errors.shortName}/>
 			</FormGroup>
-			<h2>Markery</h2>
+			<h3>Markery</h3>
 			<EditTestMarker test={test} setTest={setTest}/>
 			{
 				isLoading ?

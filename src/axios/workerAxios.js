@@ -12,7 +12,12 @@ workerAxios.interceptors.response.use(response => response,
 		if(error.response) {
 			switch (error.response.status) {
 				case 401:
-					window.location.href = '/lab/login';
+					// if(error.request.responseURL.includes('/worker/login')) {
+					// 	window.location.href = '/lab/login?errorMessage=InvalidLoginOrPassword';
+					// } else {
+					// 	window.location.href = '/lab/login?errorMessage=Unauthorized';
+					// }
+					window.location.href='/lab/login'
 					break;
 				case 403:
 					window.location.href = '/lab/403';

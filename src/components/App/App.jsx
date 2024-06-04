@@ -15,6 +15,7 @@ import WorkerOrderDetails from "../WorkerOrderDetails/WorkerOrderDetails.jsx";
 import NotFound from "../ErrorPages/NotFound.jsx";
 import Forbidden from "../ErrorPages/Forbidden.jsx";
 import AdminWorkerList from "../Admin/AdminWorkerList.jsx";
+import ResetPassword from "../ResetPassword/ResetPassword.jsx";
 
 function App() {
 
@@ -37,6 +38,7 @@ const CustomerRoutes = () => {
     <Route path="/order" element={<CustomerOrder/>}/>
     <Route path="/404" element={<NotFound/>}/>
     <Route path="/403" element={<Forbidden/>}/>
+    <Route path="login/changePassword" element={<ResetPassword isWorker={false}/>}/>
   </Routes>
 }
 
@@ -52,7 +54,7 @@ const WorkerRoutes = () => {
     <Route path="/404" element={<NotFound/>}/>
     <Route path="/403" element={<Forbidden/>}/>
     <Route path="admin/worker" element={<AdminWorkerList/>}/>
-    {/*<Route path="*" element={<NotFound/>}/>*/}
+    <Route path="login/changePassword" element={<ResetPassword isWorker={true}/>}/>
   </Routes>
 }
 

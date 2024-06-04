@@ -50,9 +50,20 @@ function WorkerOrders() {
 		}
 	}
 
+	const fetch = async () => {
+		const url = getUrl();
+		const response = await workerAxios.get(url);
+		console.log(response.data);
+		setPagedList(response.data);
+		setOrders(response.data.list);
+		setIsLoading(false);
+	}
+
 	useEffect(() => {
-		handleSearchButtonClick().catch(console.error);
-	}, [page]);
+		fetch();
+
+	}, []);
+
 
 	const pageSizeClick = (size) => {
 		setPageSize(size);
@@ -162,9 +173,15 @@ function WorkerOrders() {
 							<Button variant="primary" style={{height: '100%'}} onClick={handleSearchButtonClick}>Wyszukaj</Button>
 						</Col>
 					</Row>
+					<Button variant="outline-success" onClick={() => {navigate('/lab/order/add')}}>Dodaj zlecenie</Button>
 					<Row>
 						<Col>
 							<ListGroup variant="flush">
+								<Row>
+									<Col>Numer zlecenia</Col>
+									<Col>Pacjent</Col>
+									<Col>Status</Col>
+								</Row>
 								{orders.map(order => {
 									return (
 										<ListGroup.Item key={order.orderNumber}>
@@ -191,14 +208,17 @@ function WorkerOrders() {
 					<Pagination>
 						<Pagination.First onClick={() => {
 							setPage(1);
+							handleSearchButtonClick().catch(console.error);
 						}}/>
 						<Pagination.Prev onClick={() => {
 							setPage(Math.max(page - 1, 1));
+							handleSearchButtonClick().catch(console.error);
 						}}/>
 						{pagedList && [...Array(pagedList.pageCount)].map((_, i) => {
 							return (
 								<Pagination.Item key={i+1} active={i+1 === page} onClick={() => {
 									setPage(i+1);
+									handleSearchButtonClick().catch(console.error);
 								}}>
 									{i+1}
 								</Pagination.Item>
@@ -206,9 +226,11 @@ function WorkerOrders() {
 						})}
 						<Pagination.Next onClick={() => {
 							setPage(Math.min(page + 1, pagedList.pageCount));
+							handleSearchButtonClick().catch(console.error);
 						}}/>
 						<Pagination.Last onClick={() => {
 							setPage(pagedList.pageCount);
+							handleSearchButtonClick().catch(console.error);
 						}}/>
 					</Pagination>
 				</>
@@ -219,6 +241,7 @@ function WorkerOrders() {
 	)
 }
 
+// eslint-disable-next-line react/prop-types
 function Status({status}) {
 	switch (status) {
 		case "Registered":

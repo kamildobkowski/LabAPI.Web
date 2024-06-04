@@ -1,15 +1,37 @@
+/* eslint-disable react/prop-types */
 import {Accordion, Button, Form, FormGroup, Modal} from "react-bootstrap";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function EditTestMarker({ test, setTest }) {
 	const [newMarker, setNewMarker] = useState({name: "", shortName: "", unit: "", lowerNorm: "", higherNorm: ""});
 	const [showModal, setShowModal] = useState(false);
+	const [errors, setErrors] = useState({});
+
+	useEffect(() => {
+
+	}, [errors]);
 
 	const handleAddMarker = () => {
+		console.log(newMarker);
+		if(!validate()) {
+			return;
+		}
 		setTest({...test, markers: [...test.markers, newMarker]});
 		setNewMarker({name: "", shortName: "", unit: "", lowerNorm: "", higherNorm: ""});
 		setShowModal(false);
 	};
+
+	const validate = () => {
+		let errorList = {};
+		if(!newMarker.name || newMarker.name === '') {
+			errorList.name = 'Nazwa jest wymagana';
+		}
+		if(!!newMarker.shortName && newMarker.shortName.length < 2) {
+			errorList.shortName = 'Skrót musi mieć co najmniej 2 znaki';
+		}
+		setErrors({...errorList});
+		return Object.keys(errorList).length === 0;
+	}
 
 	return <>
 		<Accordion>
@@ -60,9 +82,11 @@ function EditTestMarker({ test, setTest }) {
 			<Modal.Body>
 				<FormGroup>
 					<Form.Label>Nazwa</Form.Label>
-					<Form.Control value={newMarker.name} onChange={e => setNewMarker({...newMarker, name: e.target.value})}/>
+					<Form.Control value={newMarker.name} onChange={e => setNewMarker({...newMarker, name: e.target.value})} isInvalid={!!errors.name}/>
+					<Form.Control.Feedback type="invalid" hidden={!errors.name}>{errors.name}</Form.Control.Feedback>
 					<Form.Label>Skrót</Form.Label>
-					<Form.Control value={newMarker.shortName} onChange={e => setNewMarker({...newMarker, shortName: e.target.value})}/>
+					<Form.Control value={newMarker.shortName} onChange={e => setNewMarker({...newMarker, shortName: e.target.value})} isInvalid={!!errors.shortName}/>
+					<Form.Control.Feedback type="invalid" hidden={!errors.shortName}>{errors.shortName}</Form.Control.Feedback>
 					<Form.Label>Jednostka</Form.Label>
 					<Form.Control value={newMarker.unit} onChange={e => setNewMarker({...newMarker, unit: e.target.value})}/>
 					<Form.Label>Dolna norma</Form.Label>
